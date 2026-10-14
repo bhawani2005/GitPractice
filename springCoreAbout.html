@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Spring Core</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #1d4e89;
+      --primary-dark: #163c6b;
+      --accent: #2f9eaf;
+      --text: #1d2433;
+      --muted: #5c6778;
+      --border: #dfe7f1;
+      --highlight: #eef7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 42px 28px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(18, 57, 104, 0.18);
+      margin-bottom: 30px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3rem); }
+    .hero p { margin: 0; font-size: 1.05rem; color: rgba(255,255,255,0.9); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 26px;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    }
+    h2 {
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+    }
+    p, li { font-size: 1.02rem; }
+    .term {
+      background: var(--highlight);
+      color: var(--primary-dark);
+      border: 1px solid #d6e9ff;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.96em;
+    }
+    ul { padding-left: 22px; }
+    .note {
+      background: #f8fbff;
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 8px;
+      color: var(--text);
+    }
+    .button-row { margin-top: 28px; text-align: center; }
+    .start-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent) 0%, #1f9db1 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.02rem;
+      box-shadow: 0 12px 20px rgba(47, 158, 175, 0.2);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 18px 14px 40px; }
+      .hero, .card { border-radius: 14px; padding: 20px 18px; }
+      h2 { font-size: 1.45rem; }
+      p, li { font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>About Spring Core</h1>
+      <p>Spring Core provides the foundation for building flexible Java applications through Inversion of Control and Dependency Injection.</p>
+    </header>
+
+    <section class="card">
+      <h2>What is Spring Core?</h2>
+      <p><span class="term">Spring Core</span> is the foundational part of the Spring Framework. It helps applications create, configure, and connect objects, reducing hard-coded dependencies and making code easier to change and test.</p>
+      <p>Its central principles are <span class="term">Loose Coupling</span>, <span class="term">Separation of Concerns</span>, and reusable application components.</p>
+    </section>
+
+    <section class="card">
+      <h2>Inversion of Control and Dependency Injection</h2>
+      <p><span class="term">Inversion of Control (IoC)</span> means that object creation and dependency management are handled by the framework rather than directly by application classes. <span class="term">Dependency Injection (DI)</span> is the technique Spring uses to provide an object's required dependencies.</p>
+      <ul>
+        <li><span class="term">Constructor Injection</span> makes required dependencies explicit and supports immutable objects.</li>
+        <li><span class="term">Setter Injection</span> is useful for optional dependencies or later configuration.</li>
+        <li>Constructor injection is generally preferred for required dependencies.</li>
+      </ul>
+      <div class="note">Instead of a class constructing every collaborator itself, it receives those collaborators from the Spring container.</div>
+    </section>
+
+    <section class="card">
+      <h2>The IoC Container and Beans</h2>
+      <p>The <span class="term">Spring IoC Container</span> creates and manages application objects called <span class="term">Beans</span>. Bean definitions can be discovered from components or declared in configuration.</p>
+      <ul>
+        <li><span class="term">BeanFactory</span> provides basic bean management.</li>
+        <li><span class="term">ApplicationContext</span> builds on it with features such as events, resource loading, and integration support.</li>
+        <li><span class="term">@Component</span>, <span class="term">@Service</span>, and <span class="term">@Repository</span> mark classes for component scanning.</li>
+        <li><span class="term">@Configuration</span> and <span class="term">@Bean</span> declare beans using Java configuration.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Configuration and Autowiring</h2>
+      <p>Spring supports <span class="term">XML Configuration</span>, <span class="term">Annotation Configuration</span>, and <span class="term">Java Configuration</span>. <span class="term">Component Scanning</span> finds annotated classes and registers them as beans.</p>
+      <ul>
+        <li><span class="term">@Autowired</span> injects a matching dependency.</li>
+        <li><span class="term">@Qualifier</span> identifies which bean to use when several candidates match.</li>
+        <li><span class="term">@Primary</span> marks the preferred candidate.</li>
+        <li><span class="term">@Value</span> injects a configured property value.</li>
+        <li><span class="term">@PropertySource</span> loads values from a properties file.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Bean Lifecycle and Scopes</h2>
+      <p>The container creates a bean, injects its dependencies, runs initialization callbacks, and eventually performs cleanup. <span class="term">@PostConstruct</span> and <span class="term">@PreDestroy</span> can mark initialization and destruction methods.</p>
+      <p>A bean's <span class="term">Scope</span> controls how instances are created and shared:</p>
+      <ul>
+        <li><span class="term">Singleton Scope</span> is the default: one instance per container.</li>
+        <li><span class="term">Prototype Scope</span> creates a new instance when requested.</li>
+        <li><span class="term">Request Scope</span> and <span class="term">Session Scope</span> apply to web requests and sessions.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Other Core Features</h2>
+      <ul>
+        <li><span class="term">BeanPostProcessor</span> can customize beans before and after initialization.</li>
+        <li><span class="term">Lazy Initialization</span> delays bean creation until it is first needed.</li>
+        <li><span class="term">Application Events</span> allow components to publish and listen for notifications.</li>
+        <li><span class="term">Aspect-Oriented Programming (AOP)</span> separates cross-cutting behavior such as logging and security from core business logic.</li>
+        <li><span class="term">Spring Expression Language (SpEL)</span> evaluates expressions in configuration and application contexts.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Why Spring Core Matters</h2>
+      <p>Understanding Spring Core helps developers build modular, maintainable, and testable applications. By letting the container manage dependencies and bean lifecycles, application code can focus on business behavior instead of manual object wiring.</p>
+      <div class="button-row">
+        <a href="springCoreTest.html" class="start-btn">Start Test</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
