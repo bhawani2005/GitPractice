@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Hibernate</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #1d4e89;
+      --primary-dark: #163c6b;
+      --accent: #2f9eaf;
+      --text: #1d2433;
+      --muted: #5c6778;
+      --border: #dfe7f1;
+      --highlight: #eef7ff;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 30px 20px 60px;
+    }
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 42px 28px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(18, 57, 104, 0.18);
+      margin-bottom: 30px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3rem); }
+    .hero p { margin: 0; font-size: 1.05rem; color: rgba(255,255,255,0.9); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 26px;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    }
+    h2 {
+      color: var(--primary);
+      margin-top: 0;
+      margin-bottom: 12px;
+      font-size: 1.8rem;
+    }
+    p, li { font-size: 1.02rem; }
+    .term {
+      background: var(--highlight);
+      color: var(--primary-dark);
+      border: 1px solid #d6e9ff;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.96em;
+    }
+    ul { padding-left: 22px; }
+    .note {
+      background: #f8fbff;
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 8px;
+      color: var(--text);
+    }
+    .button-row { margin-top: 28px; text-align: center; }
+    .start-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent) 0%, #1f9db1 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.02rem;
+      box-shadow: 0 12px 20px rgba(47, 158, 175, 0.2);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 18px 14px 40px; }
+      .hero, .card { border-radius: 14px; padding: 20px 18px; }
+      h2 { font-size: 1.45rem; }
+      p, li { font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>About Hibernate</h1>
+      <p>Hibernate is a Java persistence framework that maps objects to relational database tables and simplifies data access in Java applications.</p>
+    </header>
+
+    <section class="card">
+      <h2>What is Hibernate?</h2>
+      <p><span class="term">Hibernate ORM</span> is an open-source Java persistence framework. It implements <span class="term">Object-Relational Mapping (ORM)</span>, connecting Java classes and objects with relational database tables and rows. This lets applications work with persistent data through Java objects while Hibernate handles much of the SQL and JDBC work.</p>
+      <p>Hibernate reduces repetitive database-access code, but SQL and database knowledge remain useful for understanding queries, performance, and schema design.</p>
+    </section>
+
+    <section class="card">
+      <h2>Entities and Object-Table Mapping</h2>
+      <p>An <span class="term">Entity</span> is a Java class whose instances are stored in the database. An entity is commonly marked with <span class="term">@Entity</span>; <span class="term">@Table</span> can specify its table name. Each entity needs an identifier marked with <span class="term">@Id</span>, and <span class="term">@GeneratedValue</span> can configure how its <span class="term">Primary Key</span> is generated.</p>
+      <p>Fields are mapped to columns by convention or with annotations. Associations such as <span class="term">@OneToOne</span>, <span class="term">@ManyToOne</span>, <span class="term">@OneToMany</span>, and <span class="term">@ManyToMany</span> describe relationships between entities.</p>
+      <div class="note">Use entity mappings to describe the object model. Choose cascade and fetch behavior deliberately, especially for relationships that can load large amounts of data.</div>
+    </section>
+
+    <section class="card">
+      <h2>Configuration and Persistence Context</h2>
+      <p>Hibernate can be configured with <span class="term">hibernate.cfg.xml</span> or programmatically. Configuration supplies the database connection, credentials, mapping metadata, and a <span class="term">Dialect</span> that tells Hibernate which SQL features the database supports. Entity mappings can use <span class="term">Annotations</span> or <span class="term">XML Mapping</span>.</p>
+      <ul>
+        <li><span class="term">SessionFactory</span> – a thread-safe, usually application-wide factory used to create sessions.</li>
+        <li><span class="term">Session</span> – a short-lived unit of work and persistence context used to interact with the database.</li>
+        <li><span class="term">Connection Pooling</span> – reuses database connections and should be configured for the application's needs.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>CRUD Operations and Transactions</h2>
+      <p>Hibernate supports the usual <span class="term">CRUD Operations</span>: create, read, update, and delete. Session methods such as <span class="term">persist()</span>, <span class="term">find()</span>, <span class="term">merge()</span>, and <span class="term">remove()</span> work with managed entity objects.</p>
+      <p>Database changes should be grouped in a <span class="term">Transaction</span>. Begin a transaction, perform the work, then <span class="term">Commit</span> on success or <span class="term">Rollback</span> after a failure so partial updates are not left behind.</p>
+    </section>
+
+    <section class="card">
+      <h2>Querying Data</h2>
+      <p>Hibernate offers several ways to query persistent data:</p>
+      <ul>
+        <li><span class="term">HQL (Hibernate Query Language)</span> – queries entity classes and properties rather than database tables and columns.</li>
+        <li><span class="term">JPQL (Jakarta Persistence Query Language)</span> – a standard object-oriented query language for persistence entities.</li>
+        <li><span class="term">Criteria API</span> – builds queries programmatically.</li>
+        <li><span class="term">Native SQL</span> – runs database SQL directly when database-specific behavior is needed.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Fetching, Cascades, and Performance</h2>
+      <p><span class="term">Lazy Loading</span> fetches related data when it is first accessed; <span class="term">Eager Loading</span> fetches it immediately. The right choice depends on the use case. Unplanned relationship loading can cause the <span class="term">N+1 Select Problem</span>, where one query is followed by many extra queries.</p>
+      <ul>
+        <li><span class="term">Cascade</span> settings propagate selected operations from a parent entity to related entities.</li>
+        <li><span class="term">Dirty Checking</span> detects changes to managed entities and writes updates when the transaction is flushed.</li>
+        <li><span class="term">First-Level Cache</span> is associated with a session; the optional <span class="term">Second-Level Cache</span> can be shared across sessions.</li>
+        <li>Review generated SQL and use appropriate fetching and indexes to address <span class="term">Query Performance</span>.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Schema Management and Concurrency</h2>
+      <p>Hibernate can create or update a database schema during development using <span class="term">Schema Generation</span>, but production schema changes should normally be controlled with database migration tools. Concurrent updates may be managed with <span class="term">Optimistic Locking</span> (often using a version field) or, when necessary, <span class="term">Pessimistic Locking</span>.</p>
+      <ul>
+        <li><span class="term">Optimistic Locking</span> detects conflicting updates without holding a database lock for the full transaction.</li>
+        <li><span class="term">Pessimistic Locking</span> uses database locks to prevent conflicting operations while a transaction is active.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Benefits and Good Practices</h2>
+      <p>Hibernate provides a convenient persistence model and helps keep database access organized. Use it thoughtfully:</p>
+      <ul>
+        <li>Keep transactions and sessions within clear, short-lived units of work.</li>
+        <li>Choose mappings, fetch strategies, and cascade rules to match application behavior.</li>
+        <li>Inspect SQL and measure performance; ORM does not eliminate the need to understand database behavior.</li>
+        <li>Use parameterized queries and avoid exposing sensitive database configuration.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Conclusion</h2>
+      <p>Hibernate ORM maps Java objects to relational data and provides APIs for managing entities, transactions, and queries. Understanding entity mappings, sessions, transactions, query languages, fetching, caching, and database performance helps developers build reliable persistence layers.</p>
+      <div class="button-row">
+        <a href="hibernateTest.html" class="start-btn">Start Test</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>
