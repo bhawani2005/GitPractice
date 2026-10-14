@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Spring JDBC</title>
+  <style>
+    :root {
+      --bg: #f4f7fb;
+      --card: #ffffff;
+      --primary: #1d4e89;
+      --primary-dark: #163c6b;
+      --accent: #2f9eaf;
+      --text: #1d2433;
+      --muted: #5c6778;
+      --border: #dfe7f1;
+      --highlight: #eef7ff;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef4fb 0%, var(--bg) 100%);
+      color: var(--text);
+      line-height: 1.7;
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 30px 20px 60px; }
+    .hero {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 42px 28px;
+      border-radius: 18px;
+      box-shadow: 0 12px 30px rgba(18, 57, 104, 0.18);
+      margin-bottom: 30px;
+    }
+    .hero h1 { margin: 0 0 10px; font-size: clamp(2rem, 4vw, 3rem); }
+    .hero p { margin: 0; font-size: 1.05rem; color: rgba(255,255,255,0.9); }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 28px 26px;
+      margin-bottom: 26px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.04);
+    }
+    h2 { color: var(--primary); margin: 0 0 12px; font-size: 1.8rem; }
+    p, li { font-size: 1.02rem; }
+    .term {
+      background: var(--highlight);
+      color: var(--primary-dark);
+      border: 1px solid #d6e9ff;
+      padding: 2px 7px;
+      border-radius: 6px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.96em;
+    }
+    ul { padding-left: 22px; }
+    .note {
+      background: #f8fbff;
+      border-left: 5px solid var(--accent);
+      padding: 14px 16px;
+      border-radius: 8px;
+    }
+    .button-row { margin-top: 28px; text-align: center; }
+    .start-btn {
+      display: inline-block;
+      background: linear-gradient(135deg, var(--accent) 0%, #1f9db1 100%);
+      color: #fff;
+      text-decoration: none;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.02rem;
+      box-shadow: 0 12px 20px rgba(47, 158, 175, 0.2);
+    }
+    @media (max-width: 600px) {
+      .container { padding: 18px 14px 40px; }
+      .hero, .card { border-radius: 14px; padding: 20px 18px; }
+      h2 { font-size: 1.45rem; }
+      p, li { font-size: 0.98rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="hero">
+      <h1>About Spring JDBC</h1>
+      <p>Spring JDBC simplifies relational database access while preserving the flexibility and control of SQL.</p>
+    </header>
+
+    <section class="card">
+      <h2>What is Spring JDBC?</h2>
+      <p><span class="term">Spring JDBC</span> is a module in the Spring Framework that reduces the repetitive code needed to work with databases through JDBC. It handles common tasks such as obtaining and releasing connections, executing statements, and translating database errors into Spring's consistent <span class="term">DataAccessException</span> hierarchy.</p>
+      <p>You still write SQL, which gives you direct control over queries and database-specific behavior.</p>
+    </section>
+
+    <section class="card">
+      <h2>JdbcTemplate</h2>
+      <p><span class="term">JdbcTemplate</span> is Spring JDBC's central helper class. It manages the JDBC workflow, leaving application code to provide SQL, parameters, and result mapping.</p>
+      <ul>
+        <li><span class="term">query()</span> runs a SELECT statement and maps rows to objects.</li>
+        <li><span class="term">queryForObject()</span> retrieves a single row or value.</li>
+        <li><span class="term">update()</span> executes INSERT, UPDATE, or DELETE statements.</li>
+        <li><span class="term">execute()</span> is available for general SQL operations.</li>
+      </ul>
+      <div class="note">JdbcTemplate handles resource cleanup, so application code does not need to manually close a Connection, Statement, or ResultSet.</div>
+    </section>
+
+    <section class="card">
+      <h2>DataSource and Database Connections</h2>
+      <p>A <span class="term">DataSource</span> provides database connections and is typically configured by the application. In production, a pooled DataSource can reuse connections efficiently instead of opening a new connection for every operation.</p>
+      <p>Spring Boot can configure a DataSource from external settings such as the JDBC URL, username, and password. Keep credentials outside source code and use the correct JDBC driver for the database.</p>
+    </section>
+
+    <section class="card">
+      <h2>Mapping Query Results</h2>
+      <p>Spring JDBC maps database results into application objects using callbacks and row mappers:</p>
+      <ul>
+        <li><span class="term">RowMapper</span> converts each row in a result set to an object.</li>
+        <li><span class="term">ResultSetExtractor</span> processes the full result set, which can be useful for grouped or nested results.</li>
+        <li><span class="term">RowCallbackHandler</span> processes rows without returning a collection.</li>
+        <li><span class="term">BeanPropertyRowMapper</span> can map matching column names to bean properties; explicit mapping is often clearer for complex schemas.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Parameters and Safe SQL</h2>
+      <p>Pass input values as bound parameters rather than concatenating them into SQL. Parameter binding helps prevent <span class="term">SQL Injection</span> and correctly handles values and types.</p>
+      <ul>
+        <li>Use <span class="term">PreparedStatement</span> parameters with JdbcTemplate for positional parameters.</li>
+        <li>Use <span class="term">NamedParameterJdbcTemplate</span> for readable named parameters such as <span class="term">:customerId</span>.</li>
+        <li>Validate input according to application rules; parameterization does not replace validation or authorization.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Transactions</h2>
+      <p>Transactions group database operations into a unit that either completes or is rolled back. Spring supports declarative transaction management with <span class="term">@Transactional</span> and programmatic transaction management through <span class="term">TransactionTemplate</span>.</p>
+      <ul>
+        <li><span class="term">Commit</span> makes successful changes permanent.</li>
+        <li><span class="term">Rollback</span> discards changes when the transaction fails.</li>
+        <li>Transaction boundaries should match the business operation and avoid unnecessarily long-held connections.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Exceptions, Batch Updates, and Testing</h2>
+      <p>Spring translates vendor-specific JDBC errors into the unchecked <span class="term">DataAccessException</span> hierarchy, which helps application code handle database failures consistently.</p>
+      <ul>
+        <li><span class="term">Batch Updates</span> can reduce database round trips when many similar statements must be executed.</li>
+        <li>Use indexes, appropriate SQL, and query plans to improve <span class="term">Database Performance</span>.</li>
+        <li>Integration tests can verify repository behavior against the database engine used by the application.</li>
+      </ul>
+    </section>
+
+    <section class="card">
+      <h2>Why Spring JDBC Matters</h2>
+      <p>Spring JDBC offers a practical balance: Spring manages low-level JDBC resources and common error handling, while developers retain control of SQL and result mapping. It is a good fit when an application needs predictable SQL without the full abstraction of an ORM.</p>
+      <div class="button-row">
+        <a href="springJdbcTest.html" class="start-btn">Start Test</a>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

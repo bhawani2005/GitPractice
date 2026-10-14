@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Spring JDBC Assessment Result</title>
+  <style>
+    :root {
+      --bg: #eef4fa;
+      --card: #ffffff;
+      --primary: #1d4e89;
+      --primary-dark: #163c6b;
+      --border: #dfeaf6;
+      --soft: #f7faff;
+      --danger: #c83d32;
+      --success: #1e6848;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: linear-gradient(180deg, #edf4fb 0%, var(--bg) 100%);
+      font-family: Arial, Helvetica, sans-serif;
+      color: #1d2433;
+      line-height: 1.6;
+    }
+    .container { max-width: 1000px; margin: 40px auto; padding: 0 20px 50px; }
+    .result-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 16px 32px rgba(19, 43, 77, 0.08);
+      overflow: hidden;
+    }
+    .header {
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+      color: #fff;
+      padding: 28px 26px;
+    }
+    .header h1 { margin: 0; font-size: clamp(2rem, 4vw, 2.8rem); }
+    .content { padding: 28px 26px 30px; }
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 18px 0 26px;
+    }
+    .status-box { background: #f8fbff; border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; }
+    .status-box strong { display: block; color: var(--primary-dark); margin-bottom: 5px; }
+    .status-box .value { font-size: 1.02rem; font-weight: bold; overflow-wrap: anywhere; }
+    .section { margin-top: 24px; padding-top: 18px; border-top: 1px solid var(--border); }
+    .section h2 { margin: 0 0 12px; color: var(--primary); font-size: 1.35rem; }
+    .summary-box {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    .feedback { background: #eefaf4; border: 1px solid #cfe9d9; color: var(--success); border-radius: 12px; padding: 15px 18px; font-weight: bold; }
+    .invalid { background: #fff3f2; border: 1px solid #f3c7c4; color: var(--danger); border-radius: 12px; padding: 16px 18px; margin-bottom: 18px; font-weight: bold; }
+    .button-row { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 28px; }
+    .btn { text-decoration: none; display: inline-block; border-radius: 12px; padding: 14px 22px; font-weight: bold; }
+    .primary { background: linear-gradient(135deg, #2d9cdb 0%, #1f83ca 100%); color: #fff; box-shadow: 0 10px 22px rgba(45, 156, 219, 0.18); }
+    .secondary { background: #edf3fb; color: var(--primary-dark); border: 1px solid #d7e5f8; }
+    .keyword { display: inline-block; margin: 4px 6px 4px 0; background: #edf7ff; border: 1px solid #dceaf9; border-radius: 999px; padding: 6px 10px; }
+    @media (max-width: 600px) {
+      .container { padding: 18px 14px 40px; }
+      .header, .content { padding-left: 18px; padding-right: 18px; }
+      .button-row { flex-direction: column; }
+      .btn { width: 100%; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="result-card">
+      <div class="header">
+        <h1>Spring JDBC Assessment Result</h1>
+      </div>
+      <div class="content" id="resultContent"></div>
+    </div>
+  </div>
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const userName = params.get('userName') || '';
+    const email = params.get('email') || '';
+    const summary = params.get('summary') || '';
+    const keywords = [
+      'Spring JDBC', 'JdbcTemplate', 'DataSource', 'JDBC', 'SQL',
+      'query()', 'queryForObject()', 'update()', 'execute()', 'RowMapper',
+      'ResultSetExtractor', 'RowCallbackHandler', 'BeanPropertyRowMapper',
+      'PreparedStatement', 'NamedParameterJdbcTemplate', 'Named Parameters',
+      'Parameter Binding', 'SQL Injection', 'DataAccessException',
+      'Transaction', '@Transactional', 'TransactionTemplate', 'Commit',
+      'Rollback', 'Connection Pooling', 'Batch Updates', 'Database Performance',
+      'Resource Cleanup', 'Exception Translation'
+    ];
+    const uniqueKeywords = [...new Set(keywords)];
+
+    function isValidName(name) {
+      return /^[A-Z][A-Za-z\s'-]*$/.test(name.trim());
+    }
+
+    function isValidEmail(value) {
+      return /^[A-Za-z0-9._%+-]+@gmail\.com$/i.test(value.trim());
+    }
+
+    function containsKeyword(text, keyword) {
+      const escaped = keyword.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      return new RegExp('(^|[^A-Za-z0-9_@])' + escaped + '($|[^A-Za-z0-9_@])', 'i').test(text);
+    }
+
+    function addElement(parent, tag, className, text) {
+      const element = document.createElement(tag);
+      if (className) element.className = className;
+      if (text !== undefined) element.textContent = text;
+      parent.appendChild(element);
+      return element;
+    }
+
+    function addStatus(parent, label, value) {
+      const box = addElement(parent, 'div', 'status-box');
+      addElement(box, 'strong', '', label);
+      addElement(box, 'div', 'value', value);
+    }
+
+    function addSection(parent, title) {
+      const section = addElement(parent, 'section', 'section');
+      addElement(section, 'h2', '', title);
+      return section;
+    }
+
+    const nameValid = isValidName(userName);
+    const emailValid = isValidEmail(email);
+    const summaryText = summary.trim();
+    const matchedKeywords = uniqueKeywords.filter(keyword => containsKeyword(summaryText, keyword));
+    const percentage = uniqueKeywords.length ? matchedKeywords.length / uniqueKeywords.length * 100 : 0;
+    const rounded = Math.round(percentage * 100) / 100;
+    const rating = rounded < 50 ? 6 : rounded < 60 ? 7 : rounded < 80 ? 8 : rounded < 100 ? 9 : 10;
+    const validSubmission = nameValid && emailValid && summaryText.length > 0;
+    let feedback = 'Needs improvement. Review the Spring JDBC concepts and include more key terms in your summary.';
+    if (rounded >= 50 && rounded < 60) feedback = 'Good effort! You covered many important topics, but a few key concepts are still missing.';
+    else if (rounded >= 60 && rounded < 80) feedback = 'Good job! Your summary covers most key Spring JDBC ideas. Review the remaining concepts for even better coverage.';
+    else if (rounded >= 80 && rounded < 100) feedback = 'Excellent work! Your summary includes most important Spring JDBC topics and shows a strong understanding.';
+    else if (rounded === 100) feedback = 'Excellent! You matched all important Spring JDBC keywords and demonstrated strong understanding.';
+    if (!nameValid || !emailValid) feedback = 'Your submission cannot be considered complete because the name or email is invalid. Please correct the values and try again.';
+
+    const content = document.getElementById('resultContent');
+    if (!validSubmission) {
+      addElement(content, 'div', 'invalid', 'This page must be accessed through the assessment form with a valid name, Gmail address, and summary.');
+    }
+
+    const statusGrid = addElement(content, 'div', 'status-grid');
+    addStatus(statusGrid, 'User Name', userName || 'Not provided');
+    addStatus(statusGrid, 'Email ID', email || 'Not provided');
+    addStatus(statusGrid, 'Name Validation Status', nameValid ? 'Passed' : 'Failed');
+    addStatus(statusGrid, 'Email Validation Status', emailValid ? 'Passed' : 'Failed');
+    addStatus(statusGrid, 'Assessment Status', validSubmission ? (rounded < 50 ? 'Needs Improvement' : 'Assessment Completed') : 'Assessment Incomplete');
+    addStatus(statusGrid, 'Final Rating', rating + '/10');
+
+    if (validSubmission) {
+      const assessment = addSection(content, 'Assessment Summary');
+      const totals = addElement(assessment, 'div', 'status-grid');
+      addStatus(totals, 'Total Unique Keywords', String(uniqueKeywords.length));
+      addStatus(totals, 'Matched Keywords', String(matchedKeywords.length));
+      addStatus(totals, 'Unmatched Keywords', String(uniqueKeywords.length - matchedKeywords.length));
+      addStatus(totals, 'Match Percentage', rounded.toFixed(2) + '%');
+
+      const submitted = addSection(content, 'Submitted Summary');
+      addElement(submitted, 'div', 'summary-box', summaryText);
+
+      const matches = addSection(content, 'Matched Keywords');
+      const keywordBox = addElement(matches, 'div', 'summary-box');
+      if (matchedKeywords.length) {
+        matchedKeywords.forEach(keyword => addElement(keywordBox, 'span', 'keyword', keyword));
+      } else {
+        keywordBox.textContent = 'No keyword matches found.';
+      }
+    }
+
+    const feedbackSection = addSection(content, 'Feedback');
+    addElement(feedbackSection, 'div', 'feedback', feedback);
+
+    const buttons = addElement(content, 'div', 'button-row');
+    const aboutLink = addElement(buttons, 'a', 'btn primary', 'Back to About');
+    aboutLink.href = 'springJdbcAbout.html';
+    const testLink = addElement(buttons, 'a', 'btn secondary', 'Try Again');
+    testLink.href = 'springJdbcTest.html';
+  </script>
+</body>
+</html>
